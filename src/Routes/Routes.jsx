@@ -32,9 +32,13 @@ const Routes = () => {
       element: <Dashboard></Dashboard>,
       children:[
         {
-          path:'mytask',
+          path:'/dashboard',
           element: <MyTask/>
-        }
+        },
+        // {
+        //   path:'mytask',
+        //   element: <MyTask/>
+        // }
       ]
     },
   ]);

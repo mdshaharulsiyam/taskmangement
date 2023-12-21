@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react"
 export const FrankStoreData = createContext(null)
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import app from "../Firebase/FirebaseConfig";
 import Swal from "sweetalert2";
 import useAxiosrequest from "../Hooks/useAxiosrequest";
@@ -9,10 +9,7 @@ const auth = getAuth(app)
 const FrankStoreContext = ({ children }) => {
     const axiosrequest = useAxiosrequest()
     const axiosecure = useAxiosSecure()
-    const [currentUser,setCurrentUser]=useState(null)
-    // 
-    const [categoryFilter, setCategoryFilter] = useState('all')
-    const [seacrhValue, setSearchValue] = useState('')
+    const [currentUser, setCurrentUser] = useState(null)
     // create new user 
     const createNewUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password)
@@ -59,27 +56,31 @@ const FrankStoreContext = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                console.log(user)
-                axiosrequest.get(`/user?useremail=${user?.email}`)
-                    .then(async (res) => {
-                        const userData = res.data
-                        setCurrentUser(userData)
-                        axiosecure.post('/jwt', userData)
-                            .then((res) => {
-                                // console.log(res.data)
-                            })
-                        if (user.emailVerified !== res.data.emailVerified) {
-                            console.log('please wait responce is coming')
-                            const usersNewData = {
-                                ...userData,
-                                emailVerified: user.emailVerified
-                            };
-                            // console.log(usersNewData)
-                            axiosrequest.patch('/user',usersNewData)
-                            .then((res)=> console.log(res.data))
-                        }
-                        
-                    })
+                const res = await axiosrequest.get(`/user?useremail=${user?.email}`)
+                console.log(res);
+                const userData = res.data
+                setCurrentUser(userData)
+                axiosecure.post('/jwt', userData)
+                        .then((res) => {
+                            console.log(res.data)
+                        })
+                    // .then(async (res) => {
+                    //     const userData = res.data
+                    //     // console.log(userData);
+                    //     setCurrentUser(userData)
+                    //    
+                    //     if (user.emailVerified !== res.data.emailVerified) {
+                    //         console.log('please wait responce is coming')
+                    //         const usersNewData = {
+                    //             ...userData,
+                    //             emailVerified: user.emailVerified
+                    //         };
+                    //         // console.log(usersNewData)
+                    //         axiosrequest.patch('/user', usersNewData)
+                    //             .then((res) => console.log(res.data))
+                    //     }
+
+                    // })
 
             } else {
                 setCurrentUser(null)
@@ -89,12 +90,19 @@ const FrankStoreContext = ({ children }) => {
             return unsubscribe();
         }
     }, [])
+    const logout = () => {
+        signOut(auth).then(() => {
+            setCurrentUser(null)
+        }).catch((error) => {
+            // An error happened.
+        });
+    }
     const contextData = {
         createNewUser,
         loginuser,
         loginwithGoogle,
         currentUser,
-        seacrhValue, setSearchValue,categoryFilter, setCategoryFilter
+        logout
     }
     return (
         <FrankStoreData.Provider value={contextData}>

@@ -11,7 +11,7 @@ const Dashboard = () => {
     const userMenu = <>
         <ul className="pt-2 pb-4 space-y-1 text-sm">
             <li className="dark:bg-gray-800 dark:text-gray-50">
-                <NavLink to={'mytask'} className="flex items-center p-2 space-x-3 rounded-md">
+                <NavLink to={'/dashboard'} className="flex items-center p-2 space-x-3 rounded-md">
                     <FaTasks className="text-2xl" />
                     <span>My Task</span>
                 </NavLink>
@@ -25,7 +25,7 @@ const Dashboard = () => {
 
         </ul></>
     return (
-        <div className='text-left grid grid-cols-4 container mx-auto pt-10'>
+        <div className='text-left grid md:grid-cols-4 container mx-auto pt-10'>
             <div className="h-full p-3 space-y-2 w-60 dark:bg-gray-900 dark:text-gray-100">
                 <div className="flex items-center p-2 space-x-4">
                     <img src={currentUser?.profileImage} alt="" className="w-12 h-12 rounded-full dark:bg-gray-500" />

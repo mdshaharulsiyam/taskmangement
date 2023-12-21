@@ -4,14 +4,14 @@ import './header.css'
 import { useContext, useState } from "react";
 import { FrankStoreData } from "../../../Context/FrankStoreContext";
 const Header = () => {
-    const { seacrhValue, setSearchValue, currentUser } = useContext(FrankStoreData)
+    const { currentUser, logout } = useContext(FrankStoreData)
     const location = useLocation()
     const navlink = <>
         <NavLink to={'/'} className={`text-black menus`}>Home</NavLink>
         <NavLink to={'/about'} className={`text-black menus`}>About</NavLink>
         <NavLink to={'/dashboard'} className={`text-black menus`}>My Task</NavLink>
         {
-            currentUser?.useremail ? <button className="active:scale-90">Logout</button> : <NavLink to={'/signup'} className={`text-black menus`}>Sign Up</NavLink>
+            currentUser?.useremail ? <button onClick={logout} className="active:scale-90">Logout</button> : <NavLink to={'/signup'} className={`text-black menus`}>Sign Up</NavLink>
         }
     </>
 
@@ -23,9 +23,7 @@ const Header = () => {
                     <div className="sm:hidden block">
                         <div className="flex justify-end items-center gap-2">
                             <Link><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></Link>
-                            <button className="active:scale-90 text-3xl hover:bg-blue-600 hover:bg-opacity-25 bg-transparent p-2 relative"><IoCartOutline />
-                                <span className="absolute -top-2 bg-red-500 rounded-full text-sm p-1 text-white right-0">0</span>
-                            </button>
+
                         </div>
                     </div>
                     <div className="sm:hidden">
@@ -43,8 +41,9 @@ const Header = () => {
                 </div>
                 <div className="hidden sm:block">
                     <div className="flex justify-end items-center gap-2">
-                        
-                        <Link><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></Link>
+                        {
+                            currentUser?.useremail && <Link><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></Link>
+                        }
                     </div>
                 </div>
             </nav>
