@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "./useAxiosSecure"
-const useGetTodoData = (useremail) => {
+const useGetTodoData = (useremail,status) => {
     const axiosecure = useAxiosSecure()
     const { isPending, data: todoData = [], refetch } = useQuery({
         enabled: !!useremail,
-          queryKey : ['todo', useremail],
+          queryKey : ['task', useremail,status],
         queryFn: async () => {
-          const res = await axiosecure.get(`/task?useremail=${useremail}`)
+          const res = await axiosecure.get(`/task?useremail=${useremail}&status=${status}`)
           return res.data;
         }
       })
