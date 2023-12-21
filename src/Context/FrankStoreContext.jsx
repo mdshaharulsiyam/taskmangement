@@ -10,6 +10,7 @@ const FrankStoreContext = ({ children }) => {
     const axiosrequest = useAxiosrequest()
     const axiosecure = useAxiosSecure()
     const [currentUser, setCurrentUser] = useState(null)
+    const [loading, setloading] = useState(true)
     // create new user 
     const createNewUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password)
@@ -60,29 +61,13 @@ const FrankStoreContext = ({ children }) => {
                 console.log(res);
                 const userData = res.data
                 setCurrentUser(userData)
+                setloading(false)
                 axiosecure.post('/jwt', userData)
-                        .then((res) => {
-                            console.log(res.data)
-                        })
-                    // .then(async (res) => {
-                    //     const userData = res.data
-                    //     // console.log(userData);
-                    //     setCurrentUser(userData)
-                    //    
-                    //     if (user.emailVerified !== res.data.emailVerified) {
-                    //         console.log('please wait responce is coming')
-                    //         const usersNewData = {
-                    //             ...userData,
-                    //             emailVerified: user.emailVerified
-                    //         };
-                    //         // console.log(usersNewData)
-                    //         axiosrequest.patch('/user', usersNewData)
-                    //             .then((res) => console.log(res.data))
-                    //     }
-
-                    // })
-
+                    .then((res) => {
+                        console.log(res.data)
+                    })
             } else {
+                setloading(false)
                 setCurrentUser(null)
             }
         });
@@ -102,7 +87,7 @@ const FrankStoreContext = ({ children }) => {
         loginuser,
         loginwithGoogle,
         currentUser,
-        logout
+        logout,loading
     }
     return (
         <FrankStoreData.Provider value={contextData}>

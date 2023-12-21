@@ -6,6 +6,7 @@ import Login from "../Layout/Login/Login";
 import useAxiosrequest from "../Hooks/useAxiosrequest";
 import Dashboard from "../DashboardLayout/Dashboard/Dashboard";
 import MyTask from "../DashboardLayout/MyTask/MyTask";
+import PrivetRoute from "../PrivetRoute/PrivetRoute";
 const Routes = () => {
   const axiosrequest = useAxiosrequest()
   const router = createBrowserRouter([
@@ -29,11 +30,11 @@ const Routes = () => {
     },
     {
       path: "dashboard",
-      element: <Dashboard></Dashboard>,
-      children:[
+      element: <PrivetRoute><Dashboard /></PrivetRoute>,
+      children: [
         {
-          path:'/dashboard',
-          element: <MyTask/>
+          path: '/dashboard',
+          element: <PrivetRoute><MyTask /></PrivetRoute>
         },
         // {
         //   path:'mytask',

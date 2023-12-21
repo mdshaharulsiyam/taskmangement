@@ -1,20 +1,37 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { IoCloseSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import moment from 'moment';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { FrankStoreData } from '../../Context/FrankStoreContext';
+import Swal from 'sweetalert2';
+import useGetTodoData from '../../Hooks/useGetTodoData';
 
 const MyTask = () => {
+    const {currentUser}=useContext(FrankStoreData)
     const { register, handleSubmit, formState: { errors }, } = useForm()
     const [loading, setloading] = useState(false)
+    const axiosecure = useAxiosSecure()
     const [showtaskform, setshowtaskform] = useState(false)
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
         data.status = 'todo'
-        console.log(data);
-        // const {title,description,priority,deadline}=data
+        data.useremail = currentUser?.useremail
+        const res = await axiosecure.post('/task',data)
+        if (res.data.acknowledged) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "new task aded succesfully",
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
     }
+    const [isPending, todoData, refetch]=useGetTodoData(currentUser?.useremail)
+    console.log(todoData);
     return (
-        <div className=''>
+        <div className='px-3'>
             {showtaskform && <>
                 <div onClick={() => setshowtaskform(false)} className='bg-black bg-opacity-10 absolute min-h-screen block w-full top-0 left-0'></div>
                 <form onSubmit={handleSubmit(onSubmit)} className='w-72 md:w-[50%] flex flex-col items-start gap-2 justify-start  absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' >
@@ -37,14 +54,17 @@ const MyTask = () => {
             </>}
             <button onClick={() => setshowtaskform(true)} className='flex justify-start items-center gap-1 mt-10 mb-2 bg-blue-600 text-yellow-400 hover:bg-blue-800'> <FaPlus />  Add New Task</button>
             <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-2 items-center justify-center'>
-                <div>
-                    <h3 className='text-2xl font-bold text-center'>To-Do</h3>
+                <div className='p-2 rounded shadow-2xl bg-yellow-100'>
+                    <h3 className='text-2xl font-bold '>To-Do</h3>
+                <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                 </div>
-                <div>
-                    <h3 className='text-2xl font-bold text-center'>Ongoing</h3>
+                <div className='p-2 rounded shadow-2xl bg-yellow-100'>
+                    <h3 className='text-2xl font-bold '>Ongoing</h3>
+                <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                 </div>
-                <div>
-                    <h3 className='text-2xl font-bold text-center'>completed</h3>
+                <div className='p-2 rounded shadow-2xl bg-yellow-100'>
+                    <h3 className='text-2xl font-bold '>completed</h3>
+                <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                 </div>
             </div>
         </div>
