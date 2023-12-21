@@ -95,7 +95,7 @@ const SignUp = () => {
                 {/* <!-- Grid --> */}
                 <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
                     <div class="relative ms-4">
-                        <img class="w-full rounded-md" src="https://i.ibb.co/dG9J02H/a1c7dc5b68a42239311e510f54d8cd59.jpg" />
+                        <img class="w-full rounded-md" src="https://i.ibb.co/d4ZwsS8/The-Best-Project-Management-Software-for-Startups-scaled.jpg" />
                     </div>
                     <div className="lg:px-12 box-border">
                         <h1 class="block text-xl font-bold text-gray-800 sm:text-2xl lg:text-3xl lg:leading-tight dark:text-white">Create an account</h1>
