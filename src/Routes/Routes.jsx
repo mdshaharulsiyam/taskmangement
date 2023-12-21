@@ -4,8 +4,10 @@ import Root from "../Layout/Root/Root";
 import SignUp from "../Layout/SignUp/SignUp";
 import Login from "../Layout/Login/Login";
 import useAxiosrequest from "../Hooks/useAxiosrequest";
+import Dashboard from "../DashboardLayout/Dashboard/Dashboard";
+import MyTask from "../DashboardLayout/MyTask/MyTask";
 const Routes = () => {
-  const axiosrequest =useAxiosrequest()
+  const axiosrequest = useAxiosrequest()
   const router = createBrowserRouter([
     {
       path: "/",
@@ -23,6 +25,16 @@ const Routes = () => {
           path: "/login",
           element: <Login></Login>,
         },
+      ]
+    },
+    {
+      path: "dashboard",
+      element: <Dashboard></Dashboard>,
+      children:[
+        {
+          path:'mytask',
+          element: <MyTask/>
+        }
       ]
     },
   ]);

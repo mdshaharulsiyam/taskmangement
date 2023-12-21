@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { FrankStoreData } from "../../Context/FrankStoreContext"
 import Swal from "sweetalert2"
 const Login = () => {
-    const navigate = useNavigate()
     const [loading, setloading] = useState(false)
     const {loginuser,loginwithGoogle}=useContext(FrankStoreData)
     const [showPasswords, setshowPasswords] = useState(false)

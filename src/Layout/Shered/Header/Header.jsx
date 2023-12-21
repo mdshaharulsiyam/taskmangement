@@ -9,7 +9,7 @@ const Header = () => {
     const navlink = <>
         <NavLink to={'/'} className={`text-black menus`}>Home</NavLink>
         <NavLink to={'/about'} className={`text-black menus`}>About</NavLink>
-        <NavLink to={'/contact'} className={`text-black menus`}>Contact</NavLink>
+        <NavLink to={'/dashboard'} className={`text-black menus`}>My Task</NavLink>
         {
             currentUser?.useremail ? <button className="active:scale-90">Logout</button> : <NavLink to={'/signup'} className={`text-black menus`}>Sign Up</NavLink>
         }
