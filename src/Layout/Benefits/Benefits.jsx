@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Benefits = () => {
+    document.title = 'YourTask | Benefit'
     return (
         <div className='container mx-auto '>
             <h3 className='text-3xl font-semibold text-center py-10'>Tailored Solutions for Varied Professions</h3>

@@ -5,12 +5,15 @@ import { FaMinus, FaPlus } from 'react-icons/fa'
 import { Tooltip } from 'react-tooltip'
 import { MdDelete } from 'react-icons/md'
 import Swal from 'sweetalert2'
+import useAxiosSecure from '../../Hooks/useAxiosSecure'
 
 const PreviousTask = () => {
+    document.title = 'YourTask | previous task'
     const { currentUser } = useContext(YourTaskData)
     const [isPending, taskData, refetch] = useGetPrevTask(currentUser?.useremail)
     const [openacordian, setopenacordian] = useState(false)
     const [showid, setShowid] = useState(null)
+    const axiosecure = useAxiosSecure()
     const taskdelete = (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -25,6 +28,7 @@ const PreviousTask = () => {
                 axiosecure.delete(`/task?useremail=${currentUser?.useremail}&id=${id}`)
                     .then((res) => {
                         if (res.data.acknowledged) {
+                            refetch()
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your file has been deleted.",
@@ -39,6 +43,7 @@ const PreviousTask = () => {
             }
         });
     }
+    console.log(openacordian,showid);
     return (
         <div className='container mx-auto min-h-screen pt-12'>
             <h3 className='text-2xl font-semibold'>previous tasks ({taskData.length === 0 ? 0 : taskData.length})</h3>
@@ -49,7 +54,7 @@ const PreviousTask = () => {
                 isPending && <span className="loading loading-ring absolute w-36 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  block "></span>
             }
 
-            <div className='md:grid md:grid-cols-2'>
+            <div className=''>
                 {
                     taskData.map(item => <div className={`relative px-2 overflow-hidden ${item.status === 'completed' ? 'bg-green-300' : 'bg-red-300'} shadow-2xl my-2 rounded`} key={item._id}>
                         {

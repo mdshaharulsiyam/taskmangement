@@ -14,6 +14,7 @@ import { MdDelete } from "react-icons/md";
 import { Tooltip } from 'react-tooltip'
 import { Link } from 'react-router-dom';
 const MyTask = () => {
+    document.title = 'YourTask | my task'
     const { currentUser } = useContext(YourTaskData)
     const [isPending, todoData, refetch] = useGetTodoData(currentUser?.useremail, 'todo')
     const [loadingdata, ongoingData, refetchdata] = useGetTodoData(currentUser?.useremail, 'ongoing')

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { YourTaskData } from "../../Context/YourTaskContext"
 import Swal from "sweetalert2"
 const Login = () => {
+    document.title = 'YourTask | Login'
     const [loading, setloading] = useState(false)
     const {loginuser,loginwithGoogle}=useContext(YourTaskData)
     const [showPasswords, setshowPasswords] = useState(false)

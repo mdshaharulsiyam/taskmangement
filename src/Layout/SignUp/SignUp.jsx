@@ -7,6 +7,7 @@ import useAxiosrequest from "../../Hooks/useAxiosrequest"
 import Swal from 'sweetalert2'
 import { YourTaskData } from "../../Context/YourTaskContext"
 const SignUp = () => {
+    document.title = 'YourTask | sign up'
     const [loading,setloading]=useState(false)
     const { createNewUser,loginwithGoogle } = useContext(YourTaskData)
     const [showPasswords, setshowPasswords] = useState(false)

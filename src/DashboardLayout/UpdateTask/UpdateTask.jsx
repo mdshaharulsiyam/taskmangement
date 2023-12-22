@@ -7,6 +7,7 @@ import { YourTaskData } from '../../Context/YourTaskContext'
 
 
 const UpdateTask = () => {
+    document.title = 'YourTask | update task'
     const {currentUser}=useContext(YourTaskData)
     const { id } = useParams()
     const [singletask, setsingletask] = useState(null)
