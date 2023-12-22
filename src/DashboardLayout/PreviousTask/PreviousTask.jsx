@@ -11,7 +11,6 @@ const PreviousTask = () => {
     const [isPending, taskData, refetch] = useGetPrevTask(currentUser?.useremail)
     const [openacordian, setopenacordian] = useState(false)
     const [showid, setShowid] = useState(null)
-    console.log(taskData);
     const taskdelete = (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -43,9 +42,11 @@ const PreviousTask = () => {
     return (
         <div className='container mx-auto min-h-screen pt-12'>
             <h3 className='text-2xl font-semibold'>previous tasks ({taskData.length===0?0:taskData.length})</h3>
+            <div className='flex justify-start items-center gap-2 text-green-600 font-semibold'>completed <div className='w-16 bg-green-300 h-2'></div></div>
+            <div className='flex justify-start items-center gap-2 text-red-600 font-semibold'>uncomplete <div className='w-16 bg-red-300 h-2'></div></div>
             <div className='md:grid md:grid-cols-2'>
                 {
-                    taskData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-100 shadow-2xl my-2 rounded`} key={item._id}>
+                    taskData.map(item => <div className={`relative px-2 overflow-hidden ${item.status === 'completed'?'bg-green-300':'bg-red-300'} shadow-2xl my-2 rounded`} key={item._id}>
                         {
                             (openacordian && item._id === showid) ? <FaMinus onClick={() => {
                                 setShowid(null)

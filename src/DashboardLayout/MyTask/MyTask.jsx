@@ -12,6 +12,7 @@ import { FaCheck } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Tooltip } from 'react-tooltip'
+import { Link } from 'react-router-dom';
 const MyTask = () => {
     const { currentUser } = useContext(FrankStoreData)
     const [isPending, todoData, refetch] = useGetTodoData(currentUser?.useremail, 'todo')
@@ -33,7 +34,7 @@ const MyTask = () => {
                 text: "title should not be larger then 75 charecter",
             });
         }
-        if (data.deadline.length > 250) {
+        if (data.description.length > 250) {
             console.log(data.title.length);
             return Swal.fire({
                 icon: "error",
@@ -176,7 +177,7 @@ const MyTask = () => {
             <button onClick={() => setshowtaskform(true)} className='flex justify-start items-center gap-1 mt-10 mb-2 bg-blue-600 text-yellow-400 hover:bg-blue-800'> <FaPlus />  Add New Task</button>
             <div className='md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 items-start justify-start '>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-red-600'>To-Do ({todoData.length===0?0:todoData.length})</h3>
+                    <h3 className='text-2xl font-bold text-red-600'>To-Do ({todoData.length === 0 ? 0 : todoData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         todoData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
@@ -193,7 +194,9 @@ const MyTask = () => {
                                 (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
                                     <FaHourglassStart onClick={() => taskStart(item._id)} className='cursor-pointer hover:text-yellow-500' data-tooltip-id={`start_task${item._id}`} data-tooltip-content="start task" />
                                     <FaCheck onClick={() => taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
-                                    <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
+                                    <Link to={`/dashboard/updatetask/${item._id}`}>
+                                        <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
+                                    </Link>
                                     <MdDelete onClick={() => taskdelete(item._id)} className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
                             }
                             <Tooltip id={`start_task${item._id}`} />
@@ -213,7 +216,7 @@ const MyTask = () => {
                     }
                 </div>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-yellow-500'>Ongoing ({ongoingData.length===0?0:ongoingData.length})</h3>
+                    <h3 className='text-2xl font-bold text-yellow-500'>Ongoing ({ongoingData.length === 0 ? 0 : ongoingData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         ongoingData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
@@ -229,7 +232,9 @@ const MyTask = () => {
                             {
                                 (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
                                     <FaCheck onClick={() => taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
-                                    <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
+                                    <Link to={`/dashboard/updatetask/${item._id}`}>
+                                        <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
+                                    </Link>
                                 </span>
                             }
                             <Tooltip id={`complete_task${item._id}`} />
@@ -247,7 +252,7 @@ const MyTask = () => {
                     }
                 </div>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-blue-600'>Completed ({completedData.length===0?0:completedData.length})</h3>
+                    <h3 className='text-2xl font-bold text-blue-600'>Completed ({completedData.length === 0 ? 0 : completedData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         completedData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
