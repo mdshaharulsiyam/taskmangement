@@ -8,13 +8,12 @@ const Header = () => {
     const location = useLocation()
     const navlink = <>
         <NavLink to={'/'} className={`text-black menus`}>Home</NavLink>
-        <NavLink to={'/about'} className={`text-black menus`}>About</NavLink>
-        <NavLink to={'/dashboard'} className={`text-black menus`}>My Task</NavLink>
+        <NavLink to={'/benifits'} className={`text-black menus`}>Benefits</NavLink>
+        <NavLink to={'/dashboard/mytask'} className={`text-black menus`}>My Task</NavLink>
         {
             currentUser?.useremail ? <button onClick={logout} className="active:scale-90">Logout</button> : <NavLink to={'/signup'} className={`text-black menus`}>Sign Up</NavLink>
         }
     </>
-
     return (
         <header className="flex relative flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-yellow-200 border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
             <nav className="relative lg:container w-full mx-auto px-4 py-3 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8" aria-label="Global">

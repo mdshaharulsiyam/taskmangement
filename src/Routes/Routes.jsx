@@ -9,6 +9,7 @@ import MyTask from "../DashboardLayout/MyTask/MyTask";
 import PrivetRoute from "../PrivetRoute/PrivetRoute";
 import PreviousTask from "../DashboardLayout/PreviousTask/PreviousTask";
 import UpdateTask from "../DashboardLayout/UpdateTask/UpdateTask";
+import Benefits from "../Layout/Benefits/Benefits";
 const Routes = () => {
   const axiosrequest = useAxiosrequest()
   const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const Routes = () => {
         {
           path: "/login",
           element: <Login></Login>,
+        },
+        {
+          path: "/benifits",
+          element: <Benefits></Benefits>,
         },
       ]
     },
