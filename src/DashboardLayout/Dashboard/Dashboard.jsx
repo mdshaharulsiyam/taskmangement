@@ -11,13 +11,13 @@ const Dashboard = () => {
     const userMenu = <>
         <ul className="pt-2 pb-4 space-y-1 text-sm">
             <li className="dark:bg-gray-800 dark:text-gray-50">
-                <NavLink to={'/dashboard'} className="flex items-center p-2 space-x-3 rounded-md">
+                <NavLink to={'mytask'} className="flex items-center p-2 space-x-3 rounded-md">
                     <FaTasks className="text-2xl" />
                     <span>My Task</span>
                 </NavLink>
             </li>
             <li className="dark:bg-gray-800 dark:text-gray-50">
-                <NavLink rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                <NavLink to={'prevtask'} className="flex items-center p-2 space-x-3 rounded-md">
                     <GrTask className="text-2xl" />
                     <span>previous Task</span>
                 </NavLink>
@@ -36,7 +36,7 @@ const Dashboard = () => {
                         </span>
                     </div>
                 </div>
-                <div className="divide-y dark:divide-gray-700">
+                <div className="divide-y dark:divide-gray-700 menues">
                     {
                         userMenu
                     }

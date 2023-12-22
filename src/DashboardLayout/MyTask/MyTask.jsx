@@ -14,9 +14,9 @@ import { MdDelete } from "react-icons/md";
 import { Tooltip } from 'react-tooltip'
 const MyTask = () => {
     const { currentUser } = useContext(FrankStoreData)
-    const [isPending, todoData, refetch] = useGetTodoData(currentUser?.useremail,'todo')
-    const [loadingdata, ongoingData, refetchdata] = useGetTodoData(currentUser?.useremail,'ongoing')
-    const [pending, completedData, fetchagain] = useGetTodoData(currentUser?.useremail,'completed')
+    const [isPending, todoData, refetch] = useGetTodoData(currentUser?.useremail, 'todo')
+    const [loadingdata, ongoingData, refetchdata] = useGetTodoData(currentUser?.useremail, 'ongoing')
+    const [pending, completedData, fetchagain] = useGetTodoData(currentUser?.useremail, 'completed')
     // console.log(ongoingData);
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const [loading, setloading] = useState(false)
@@ -46,7 +46,9 @@ const MyTask = () => {
         const res = await axiosecure.post('/task', data)
         if (res.data.acknowledged) {
             reset()
+            refetchdata()
             refetch()
+            fetchagain()
             setshowtaskform(false)
             Swal.fire({
                 position: "top-end",
@@ -73,17 +75,19 @@ const MyTask = () => {
                     status: 'ongoing',
                 }
                 axiosecure.patch(`/task?useremail=${currentUser?.useremail}&id=${id}`, data)
-                .then((res)=>{
-                    if (res.data.acknowledged) {
-                        Swal.fire({
-                            title: "started!",
-                            text: "tast started succesfully",
-                            icon: "success"
-                        });
-                        refetch()
-                    }
-                })
-                
+                    .then((res) => {
+                        if (res.data.acknowledged) {
+                            Swal.fire({
+                                title: "started!",
+                                text: "tast started succesfully",
+                                icon: "success"
+                            });
+                            refetchdata()
+                            refetch()
+                            fetchagain()
+                        }
+                    })
+
             }
         });
     }
@@ -103,22 +107,52 @@ const MyTask = () => {
                     status: 'completed',
                 }
                 axiosecure.patch(`/task?useremail=${currentUser?.useremail}&id=${id}`, data)
-                .then((res)=>{
-                    if (res.data.acknowledged) {
-                        Swal.fire({
-                            title: "started!",
-                            text: "tast started succesfully",
-                            icon: "success"
-                        });
-                        refetch()
-                    }
-                })
-                
+                    .then((res) => {
+                        if (res.data.acknowledged) {
+                            Swal.fire({
+                                title: "started!",
+                                text: "tast started succesfully",
+                                icon: "success"
+                            });
+                            refetchdata()
+                            refetch()
+                            fetchagain()
+                        }
+                    })
+
+            }
+        });
+    }
+    const taskdelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosecure.delete(`/task?useremail=${currentUser?.useremail}&id=${id}`)
+                    .then((res) => {
+                        if (res.data.acknowledged) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            refetchdata()
+                            refetch()
+                            fetchagain()
+                        }
+                    })
+
             }
         });
     }
     return (
-        <div className='px-3'>
+        <div className='px-3 container mx-auto'>
             {showtaskform && <>
                 <div onClick={() => setshowtaskform(false)} className='bg-black bg-opacity-10 absolute min-h-screen block w-full top-0 left-0'></div>
                 <form onSubmit={handleSubmit(onSubmit)} className='w-72 md:w-[50%] bg-white p-3 flex flex-col items-start gap-2 justify-start z-40 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]' >
@@ -142,7 +176,7 @@ const MyTask = () => {
             <button onClick={() => setshowtaskform(true)} className='flex justify-start items-center gap-1 mt-10 mb-2 bg-blue-600 text-yellow-400 hover:bg-blue-800'> <FaPlus />  Add New Task</button>
             <div className='md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 items-start justify-start '>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-red-600'>To-Do</h3>
+                    <h3 className='text-2xl font-bold text-red-600'>To-Do ({todoData.length===0?0:todoData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         todoData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
@@ -158,9 +192,9 @@ const MyTask = () => {
                             {
                                 (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
                                     <FaHourglassStart onClick={() => taskStart(item._id)} className='cursor-pointer hover:text-yellow-500' data-tooltip-id={`start_task${item._id}`} data-tooltip-content="start task" />
-                                    <FaCheck onClick={()=>taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
+                                    <FaCheck onClick={() => taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
                                     <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
-                                    <MdDelete className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
+                                    <MdDelete onClick={() => taskdelete(item._id)} className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
                             }
                             <Tooltip id={`start_task${item._id}`} />
                             <Tooltip id={`complete_task${item._id}`} />
@@ -179,7 +213,7 @@ const MyTask = () => {
                     }
                 </div>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-yellow-500'>Ongoing</h3>
+                    <h3 className='text-2xl font-bold text-yellow-500'>Ongoing ({ongoingData.length===0?0:ongoingData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         ongoingData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
@@ -194,14 +228,12 @@ const MyTask = () => {
                             }
                             {
                                 (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
-                                    <FaCheck onClick={()=>taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
+                                    <FaCheck onClick={() => taskcomplete(item._id)} className='cursor-pointer hover:text-green-600' data-tooltip-id={`complete_task${item._id}`} data-tooltip-content="complete task" />
                                     <FaRegEdit className='cursor-pointer hover:text-blue-600' data-tooltip-id={`edit_task${item._id}`} data-tooltip-content="edit task" />
-                                   </span>
+                                </span>
                             }
-                            <Tooltip id={`start_task${item._id}`} />
                             <Tooltip id={`complete_task${item._id}`} />
                             <Tooltip id={`edit_task${item._id}`} />
-                            <Tooltip id={`delete_task${item._id}`} />
                             <h3 className=' py-1 font-semibold pr-2'>{item?.title}</h3>
                             <div className={`${(openacordian && item._id === showid) ? 'h-auto' : 'h-[1px]'} overflow-hidden transition-all`}>
                                 <span>
@@ -215,7 +247,7 @@ const MyTask = () => {
                     }
                 </div>
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
-                    <h3 className='text-2xl font-bold text-blue-600'>Completed</h3>
+                    <h3 className='text-2xl font-bold text-blue-600'>Completed ({completedData.length===0?0:completedData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
                         completedData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
@@ -230,12 +262,9 @@ const MyTask = () => {
                             }
                             {
                                 (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
-                                  
-                                    <MdDelete className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
+
+                                    <MdDelete onClick={() => taskdelete(item._id)} className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
                             }
-                            <Tooltip id={`start_task${item._id}`} />
-                            <Tooltip id={`complete_task${item._id}`} />
-                            <Tooltip id={`edit_task${item._id}`} />
                             <Tooltip id={`delete_task${item._id}`} />
                             <h3 className=' py-1 font-semibold pr-2'>{item?.title}</h3>
                             <div className={`${(openacordian && item._id === showid) ? 'h-auto' : 'h-[1px]'} overflow-hidden transition-all`}>

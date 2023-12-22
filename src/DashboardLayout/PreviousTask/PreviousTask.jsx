@@ -1,0 +1,85 @@
+import React, { useContext, useState } from 'react'
+import useGetPrevTask from '../../Hooks/useGetPrevTask'
+import { FrankStoreData } from '../../Context/FrankStoreContext'
+import { FaMinus, FaPlus } from 'react-icons/fa'
+import { Tooltip } from 'react-tooltip'
+import { MdDelete } from 'react-icons/md'
+import Swal from 'sweetalert2'
+
+const PreviousTask = () => {
+    const { currentUser } = useContext(FrankStoreData)
+    const [isPending, taskData, refetch] = useGetPrevTask(currentUser?.useremail)
+    const [openacordian, setopenacordian] = useState(false)
+    const [showid, setShowid] = useState(null)
+    console.log(taskData);
+    const taskdelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosecure.delete(`/task?useremail=${currentUser?.useremail}&id=${id}`)
+                    .then((res) => {
+                        if (res.data.acknowledged) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            refetchdata()
+                            refetch()
+                            fetchagain()
+                        }
+                    })
+
+            }
+        });
+    }
+    return (
+        <div className='container mx-auto min-h-screen pt-12'>
+            <h3 className='text-2xl font-semibold'>previous tasks ({taskData.length===0?0:taskData.length})</h3>
+            <div className='md:grid md:grid-cols-2'>
+                {
+                    taskData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-100 shadow-2xl my-2 rounded`} key={item._id}>
+                        {
+                            (openacordian && item._id === showid) ? <FaMinus onClick={() => {
+                                setShowid(null)
+                                setopenacordian(false)
+                            }} className='absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer  hover:text-blue-600' /> : <FaPlus onClick={() => {
+                                setShowid(item._id)
+                                setopenacordian(true)
+                            }} className='absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer  hover:text-blue-600' />
+                        }
+                        {
+                            (openacordian && item._id === showid) && <span className='flex justify-start items-center p-2 gap-2'>
+
+                                <MdDelete onClick={() => taskdelete(item._id)} className='cursor-pointer hover:text-red-600' data-tooltip-id={`delete_task${item._id}`} data-tooltip-content="delete task" /> </span>
+                        }
+                        <Tooltip id={`delete_task${item._id}`} />
+                        <h3 className=' py-1 font-semibold pr-2'>{item?.title}</h3>
+                        <div className={`${(openacordian && item._id === showid) ? 'h-auto' : 'h-[1px]'} overflow-hidden transition-all`}>
+                            <span>
+                                priority : <span className={`${item?.priority === '3' ? 'text-red-600' : item?.priority === '2' ? 'text-yellow-600' : 'text-green-600'} font-semibold`} >
+                                    {item?.priority === '3' ? 'high' : item?.priority === '2' ? 'moderate' : 'Low'}
+                                </span></span>
+                            <p className='font-semibold'>
+                                status : {
+                                    item.status === 'completed'?'completed':'uncompleted'
+                                }
+                            </p>
+                            <p>deadline : {item.deadline}</p>
+                            <p>{item.description}</p>
+                        </div>
+                    </div>)
+                }
+            </div>
+        </div>
+    )
+}
+
+export default PreviousTask
