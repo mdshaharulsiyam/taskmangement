@@ -5,10 +5,10 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6"
 import { Link, useNavigate } from "react-router-dom"
 import useAxiosrequest from "../../Hooks/useAxiosrequest"
 import Swal from 'sweetalert2'
-import { FrankStoreData } from "../../Context/FrankStoreContext"
+import { YourTaskData } from "../../Context/YourTaskContext"
 const SignUp = () => {
     const [loading,setloading]=useState(false)
-    const { createNewUser,loginwithGoogle } = useContext(FrankStoreData)
+    const { createNewUser,loginwithGoogle } = useContext(YourTaskData)
     const [showPasswords, setshowPasswords] = useState(false)
     const axiosrequest = useAxiosrequest()
     const { register, handleSubmit, formState: { errors }, } = useForm()
@@ -42,7 +42,6 @@ const SignUp = () => {
                             role: "user",
                             emailVerified : false
                         }
-                        // console.log(userData)
                         axiosrequest.post('/users', userData)
                             .then((res) => {
                                 setloading(false)

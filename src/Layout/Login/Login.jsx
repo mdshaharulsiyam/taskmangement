@@ -2,22 +2,24 @@ import { useContext, useState } from "react"
 import { useForm, } from "react-hook-form"
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6"
 import { Link, useNavigate } from "react-router-dom"
-import { FrankStoreData } from "../../Context/FrankStoreContext"
+import { YourTaskData } from "../../Context/YourTaskContext"
 import Swal from "sweetalert2"
 const Login = () => {
     const [loading, setloading] = useState(false)
-    const {loginuser,loginwithGoogle}=useContext(FrankStoreData)
+    const {loginuser,loginwithGoogle}=useContext(YourTaskData)
     const [showPasswords, setshowPasswords] = useState(false)
     const { register, handleSubmit, formState: { errors }, } = useForm()
     const showPassword = () => {
         setshowPasswords(!showPasswords)
     }
+    const navigate = useNavigate()
     const onSubmit = (data) => {
         setloading(true)
         loginuser(data.email,data.password)
         .then((userCredential) => {
+            navigate('/dashboard/mytask')
             setloading(false)
-            const user = userCredential.user;
+            // const user = userCredential.user;
             Swal.fire({
                 position: "top-end",
                 icon: "success",

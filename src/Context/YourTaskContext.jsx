@@ -1,15 +1,15 @@
 import { createContext, useEffect, useState } from "react"
-export const FrankStoreData = createContext(null)
+export const YourTaskData = createContext({})
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import app from "../Firebase/FirebaseConfig";
 import Swal from "sweetalert2";
 import useAxiosrequest from "../Hooks/useAxiosrequest";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 const auth = getAuth(app)
-const FrankStoreContext = ({ children }) => {
+const YourTaskContext = ({ children }) => {
     const axiosrequest = useAxiosrequest()
     const axiosecure = useAxiosSecure()
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useState({})
     const [loading, setloading] = useState(true)
     // create new user 
     const createNewUser = (email, password) => {
@@ -90,10 +90,10 @@ const FrankStoreContext = ({ children }) => {
         logout,loading
     }
     return (
-        <FrankStoreData.Provider value={contextData}>
+        <YourTaskData.Provider value={contextData}>
             {children}
-        </FrankStoreData.Provider>
+        </YourTaskData.Provider>
     )
 }
 
-export default FrankStoreContext
+export default YourTaskContext

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { IoCloseSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { FrankStoreData } from '../../Context/FrankStoreContext';
+import { YourTaskData } from '../../Context/YourTaskContext';
 import Swal from 'sweetalert2';
 import useGetTodoData from '../../Hooks/useGetTodoData';
 import { FaMinus } from "react-icons/fa";
@@ -14,7 +14,7 @@ import { MdDelete } from "react-icons/md";
 import { Tooltip } from 'react-tooltip'
 import { Link } from 'react-router-dom';
 const MyTask = () => {
-    const { currentUser } = useContext(FrankStoreData)
+    const { currentUser } = useContext(YourTaskData)
     const [isPending, todoData, refetch] = useGetTodoData(currentUser?.useremail, 'todo')
     const [loadingdata, ongoingData, refetchdata] = useGetTodoData(currentUser?.useremail, 'ongoing')
     const [pending, completedData, fetchagain] = useGetTodoData(currentUser?.useremail, 'completed')
@@ -180,6 +180,9 @@ const MyTask = () => {
                     <h3 className='text-2xl font-bold text-red-600'>To-Do ({todoData.length === 0 ? 0 : todoData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
+                        isPending && <span className="loading loading-bars loading-xs"></span>
+                    }
+                    {
                         todoData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
                             {
                                 (openacordian && item._id === showid) ? <FaMinus onClick={() => {
@@ -219,6 +222,9 @@ const MyTask = () => {
                     <h3 className='text-2xl font-bold text-yellow-500'>Ongoing ({ongoingData.length === 0 ? 0 : ongoingData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
                     {
+                        loadingdata && <span className="loading loading-bars loading-xs"></span>
+                    }
+                    {
                         ongoingData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
                             {
                                 (openacordian && item._id === showid) ? <FaMinus onClick={() => {
@@ -254,6 +260,9 @@ const MyTask = () => {
                 <div className='p-2 rounded shadow-2xl bg-yellow-100 w-full'>
                     <h3 className='text-2xl font-bold text-blue-600'>Completed ({completedData.length === 0 ? 0 : completedData.length})</h3>
                     <hr className='w-[100%] h-[2px] mx-auto bg-blue-500' />
+                    {
+                        pending && <span className="loading loading-bars loading-xs"></span>
+                    }
                     {
                         completedData.map(item => <div className={`relative px-2 overflow-hidden bg-yellow-50 shadow my-2 rounded`} key={item._id}>
                             {

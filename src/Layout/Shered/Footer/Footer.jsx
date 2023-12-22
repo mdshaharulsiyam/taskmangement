@@ -8,8 +8,8 @@ const Footer = () => {
                 {/* <!-- Grid --> */}
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-10">
                     <div class="col-span-full hidden lg:col-span-1 lg:block">
-                        <a class="flex-none text-2xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#" aria-label="Brand">FrankStore</a>
-                        <p class="mt-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">FrankStore: Quality, Speed, Confidence. Shop premium goods with 24/7 service, fast delivery, and a money-back guarantee. Elevate your lifestyle effortlessly.</p>
+                        <a class="flex-none text-2xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#" aria-label="Brand">YourTask</a>
+                        <p class="mt-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">YourTask: Streamlining tasks for professionals, creators, and innovators. Elevate productivity with our intuitive platform.</p>
                     </div>
                     {/* <!-- End Col --> */}
 
@@ -63,7 +63,7 @@ const Footer = () => {
                 {/* <!-- End Grid --> */}
 
                 <div class="pt-5 mt-5 border-t border-gray-200 dark:border-gray-700">
-                    <p>© Copyright Rimel 2023. All right reserved</p>
+                    <p>© Copyright siyam 2023. All right reserved</p>
                 </div>
             </div>
         </div>

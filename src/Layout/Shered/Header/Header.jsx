@@ -2,9 +2,9 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
 import { IoSearchOutline, IoCartOutline } from "react-icons/io5";
 import './header.css'
 import { useContext, useState } from "react";
-import { FrankStoreData } from "../../../Context/FrankStoreContext";
+import { YourTaskData } from "../../../Context/YourTaskContext";
 const Header = () => {
-    const { currentUser, logout } = useContext(FrankStoreData)
+    const { currentUser, logout } = useContext(YourTaskData)
     const location = useLocation()
     const navlink = <>
         <NavLink to={'/'} className={`text-black menus`}>Home</NavLink>

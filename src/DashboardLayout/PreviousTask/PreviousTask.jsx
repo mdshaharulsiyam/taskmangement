@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import useGetPrevTask from '../../Hooks/useGetPrevTask'
-import { FrankStoreData } from '../../Context/FrankStoreContext'
+import { YourTaskData } from '../../Context/YourTaskContext'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { Tooltip } from 'react-tooltip'
 import { MdDelete } from 'react-icons/md'
 import Swal from 'sweetalert2'
 
 const PreviousTask = () => {
-    const { currentUser } = useContext(FrankStoreData)
+    const { currentUser } = useContext(YourTaskData)
     const [isPending, taskData, refetch] = useGetPrevTask(currentUser?.useremail)
     const [openacordian, setopenacordian] = useState(false)
     const [showid, setShowid] = useState(null)
@@ -41,12 +41,17 @@ const PreviousTask = () => {
     }
     return (
         <div className='container mx-auto min-h-screen pt-12'>
-            <h3 className='text-2xl font-semibold'>previous tasks ({taskData.length===0?0:taskData.length})</h3>
+            <h3 className='text-2xl font-semibold'>previous tasks ({taskData.length === 0 ? 0 : taskData.length})</h3>
             <div className='flex justify-start items-center gap-2 text-green-600 font-semibold'>completed <div className='w-16 bg-green-300 h-2'></div></div>
             <div className='flex justify-start items-center gap-2 text-red-600 font-semibold'>uncomplete <div className='w-16 bg-red-300 h-2'></div></div>
+
+            {
+                isPending && <span className="loading loading-ring absolute w-36 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  block "></span>
+            }
+
             <div className='md:grid md:grid-cols-2'>
                 {
-                    taskData.map(item => <div className={`relative px-2 overflow-hidden ${item.status === 'completed'?'bg-green-300':'bg-red-300'} shadow-2xl my-2 rounded`} key={item._id}>
+                    taskData.map(item => <div className={`relative px-2 overflow-hidden ${item.status === 'completed' ? 'bg-green-300' : 'bg-red-300'} shadow-2xl my-2 rounded`} key={item._id}>
                         {
                             (openacordian && item._id === showid) ? <FaMinus onClick={() => {
                                 setShowid(null)
@@ -70,7 +75,7 @@ const PreviousTask = () => {
                                 </span></span>
                             <p className='font-semibold'>
                                 status : {
-                                    item.status === 'completed'?'completed':'uncompleted'
+                                    item.status === 'completed' ? 'completed' : 'uncompleted'
                                 }
                             </p>
                             <p>deadline : {item.deadline}</p>
