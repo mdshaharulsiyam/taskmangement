@@ -1,11 +1,26 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
 import { IoSearchOutline, IoCartOutline } from "react-icons/io5";
 import './header.css'
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { YourTaskData } from "../../../Context/YourTaskContext";
+import { IoNotifications } from "react-icons/io5";
+import Notification from "../Notification/Notification";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const Header = () => {
+    const [NotificationData, setNotificationData] = useState([])
     const { currentUser, logout } = useContext(YourTaskData)
-    const location = useLocation()
+    const axiosecure = useAxiosSecure()
+    // const location = useLocation()
+    useEffect(() => {
+        if (!currentUser?.useremail) {
+            return
+        }
+        axiosecure.get(`/notification?useremail=${currentUser?.useremail}`)
+        .then((res)=>{
+            console.log(res.data)
+            setNotificationData(res.data)
+        })
+    }, [currentUser?.useremail])
     const navlink = <>
         <NavLink to={'/'} className={`text-black menus`}>Home</NavLink>
         <NavLink to={'/benifits'} className={`text-black menus`}>Benefits</NavLink>
@@ -14,6 +29,10 @@ const Header = () => {
             currentUser?.useremail ? <button onClick={logout} className="active:scale-90">Logout</button> : <NavLink to={'/signup'} className={`text-black menus`}>Sign Up</NavLink>
         }
     </>
+    const [CartItemShow, setCartItemShow] = useState(false)
+    const showCartItem = () => {
+        setCartItemShow(!CartItemShow)
+    }
     return (
         <header className="flex relative flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-yellow-200 border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
             <nav className="relative lg:container w-full mx-auto px-4 py-3 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8" aria-label="Global">
@@ -21,8 +40,10 @@ const Header = () => {
                     <Link to={'/'} className="flex-none font-bold text-2xl text-black dark:text-white hidden lg:block" aria-label="Brand">YourTask</Link>
                     <div className="sm:hidden block">
                         <div className="flex justify-end items-center gap-2">
-                            <Link><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></Link>
-
+                            <span><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></span>
+                            <button onClick={showCartItem} className="active:scale-90 text-3xl hover:bg-blue-600 hover:bg-opacity-25 bg-transparent p-2 relative"><IoNotifications />
+                                <span className="absolute -top-2 bg-red-500 rounded-full text-sm p-1 text-white right-0">{NotificationData.length}</span>
+                            </button>
                         </div>
                     </div>
                     <div className="sm:hidden">
@@ -41,11 +62,17 @@ const Header = () => {
                 <div className="hidden sm:block">
                     <div className="flex justify-end items-center gap-2">
                         {
-                            currentUser?.useremail && <Link><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></Link>
+                            currentUser?.useremail && <span><img className="w-10 h-10 rounded-full" src={currentUser?.profileImage} alt="" /></span>
                         }
+                        <button onClick={showCartItem} className="active:scale-90 text-3xl hover:bg-blue-600 hover:bg-opacity-25 bg-transparent p-2 relative"><IoNotifications />
+                            <span className="absolute -top-2 bg-red-500 rounded-full text-sm p-1 text-white right-0">{NotificationData.length}</span>
+                        </button>
                     </div>
                 </div>
             </nav>
+            {
+                CartItemShow && <Notification NotificationData={NotificationData} setCartItemShow={setCartItemShow} />
+            }
         </header>
     )
 }

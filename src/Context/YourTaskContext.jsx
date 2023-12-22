@@ -57,12 +57,14 @@ const YourTaskContext = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const res = await axiosrequest.get(`/user?useremail=${user?.email}`)
-                console.log(res);
-                const userData = res.data
-                setCurrentUser(userData)
+                const userdata = {
+                    profileImage : user?.photoURL,
+                    username : user?.displayName,
+                    useremail: user?.email
+                }
+                setCurrentUser(userdata)
                 setloading(false)
-                axiosecure.post('/jwt', userData)
+                axiosecure.post('/jwt', userdata)
                     .then((res) => {
                         console.log(res.data)
                     })
